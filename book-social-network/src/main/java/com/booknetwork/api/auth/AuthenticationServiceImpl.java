@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -12,11 +13,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.webauthn.api.AuthenticatorResponse;
 import org.springframework.stereotype.Service;
 
 import com.booknetwork.api.email.EmailService;
 import com.booknetwork.api.email.EmailTemplateName;
+import com.booknetwork.api.exception.ResourceAlreadyExistsException;
 import com.booknetwork.api.role.Role;
 import com.booknetwork.api.role.RoleRepository;
 import com.booknetwork.api.security.JwtService;
@@ -26,7 +27,6 @@ import com.booknetwork.api.user.User;
 import com.booknetwork.api.user.UserRepository;
 
 import jakarta.mail.MessagingException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -46,6 +46,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public AuthenticationResponse register(RegistrationRequest request) throws MessagingException {
+
+		// check if user already exists by email
+		Optional<User> userWithEmail = this.userRepository.findByEmail(request.getEmail());
+		if (userWithEmail.isPresent()) {
+			throw new ResourceAlreadyExistsException(
+					"A user with Email " + request.getEmail() + " already exists. Kindly Login.");
+		}
+
 		// get USER role
 		Role userRole = roleRepository.findByName("USER")
 				.orElseThrow(() -> new RuntimeException("User role not found."));
