@@ -1,5 +1,6 @@
 package com.booknetwork.api.book;
 
+import java.beans.Transient;
 import java.util.List;
 
 import com.booknetwork.api.common.BaseEntity;
@@ -31,7 +32,6 @@ public class Book extends BaseEntity {
     private String publisher;
     private String isbn;
     private String synopsis;
-    private String bookCover;
 
     private boolean isArchived;
     private boolean shareable;
@@ -47,4 +47,14 @@ public class Book extends BaseEntity {
     @OneToMany(mappedBy = "book")
     private List<BookTransactionHistory> bookTransactions;
 
+    @Transient
+    public double getRatings() {
+        if (feedbacks == null || feedbacks.isEmpty()) {
+            return 0.0;
+        }
+        return this.feedbacks.stream()
+                .mapToDouble(Feedback::getRating)
+                .average()
+                .orElse(0.0);
+    }
 }
