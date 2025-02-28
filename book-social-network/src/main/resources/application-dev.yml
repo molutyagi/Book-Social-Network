@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/book_social_network
-    username: user
+    username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
   jpa:
@@ -10,13 +10,13 @@ spring:
     show-sql: true
     properties:
       hibernate:
-         format_sql: true
+        format_sql: true
     database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   mail:
     host: localhost
-    port: 1025 
+    port: 1025
     username: molu
     password: sender_password
     properties:
@@ -30,3 +30,25 @@ spring:
         timeout: 3000
         writetimeout: 5000
 
+application:
+  security:
+    jwt:
+      secretKey: B197DD2891F83856219BA9C1B1A9EB197DD2891F83856219BA9C1B1A9E
+      access-token-expiration: 300000 # 5 minutes
+      refresh-token-expiration: 86400000 # 1 Day
+  mailing:
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.transaction: DEBUG
+    org.springframework.jdbc.core: DEBUG
+    org.springframework.data.jpa: DEBUG
+    org.springframework.web: DEBUG
+    com.molu: DEBUG

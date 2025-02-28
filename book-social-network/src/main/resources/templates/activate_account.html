@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            /* Adjusted max-width */
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .company-name {
+            color: #FF0000;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            /* Center the text */
+            margin-bottom: 20px;
+            /* Add some bottom margin */
+        }
+
+        .url-section {
+            text-align: center;
+            /* Center the text horizontally */
+            margin-top: 20px;
+            width: 50%;
+            margin-left: auto;
+            /* Adjusted margin */
+            margin-right: auto;
+            /* Adjusted margin */
+        }
+
+        .url-label {
+            font-weight: bold;
+        }
+
+        .url-code {
+            padding: 10px;
+            background-color: #e6e6e6;
+            border-radius: 5px;
+            font-size: 30px;
+            font-weight: bold;
+            display: inline-block;
+            /* Ensure the code div respects its width */
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: red;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-left: 190px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .second {
+            max-width: 700px;
+            /* Adjusted max-width */
+            margin-top: 20px;
+            /* Add margin-top */
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-1 {
+            margin-bottom: 10px;
+            /* Add some bottom margin */
+        }
+
+        .p {
+            font-weight: bold;
+        }
+
+        .text {
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="company-name">The Book Social Network</h2>
+        <h4 class="company-name">OTP to aayega hi bro "I'M Batman"</h4>
+        <div class="second">
+            <h2 class="text-1">Account Activation</h2>
+            <span th:text="'Hello Reader ' + ${username} + ','"></span>
+            <p class="p">Your account activation code is: </p>
+            <div class="url-section">
+                <div class="url-code"> <span th:text="${activationCode}"></span></div>
+                <a href="confirmationUrl" class="btn">Verify Email</a>
+            </div>
+            <p class="p">This url is valid for the next 5 minutes only.</p>
+            <p class="text">Thank you for your interest in Book Social Network. We are very thrilled to welcome you to our
+                community of Readers. To verify your email and complete the sign-up
+                process, please use the url provided above.</p>
+            <!-- <a href="#" class="btn">Verify url</a> -->
+        </div>
+    </div>
+</body>
+
+</html>

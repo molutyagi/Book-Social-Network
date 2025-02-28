@@ -103,7 +103,7 @@ public class User implements UserDetails, Principal {
 		return this.accountEnabled;
 	}
 
-	private String getFullName() {
+	public String getFullName() {
 		return String.format("%s %s", this.firstName, this.lastName);
 	}
 

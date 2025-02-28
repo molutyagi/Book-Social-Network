@@ -23,10 +23,10 @@ public class SecurityConfig {
 	private final AuthenticationProvider authenticationProvider;
 	private final JwtAuthFilter jwtAuthFilter;
 
-	private static final String[] ADMIN_ONLY_URLS = { "admin/**", "categories/**" };
+	private static final String[] ADMIN_ONLY_URLS = { "admin/**" };
 
-	private static final String[] PUBLIC_URLS = { "/v3/api-docs", "/v2/api-docs", "auth/**", "/transactions/**",
-			"/swagger-resources/**", "/swagger-ui/**", "/webjars/**", "cloudinary/**" };
+	private static final String[] PUBLIC_URLS = { "/v3/api-docs", "/v2/api-docs", "/auth/**", "/swagger-resources/**",
+			"/swagger-ui/**", "/webjars/**", "cloudinary/**", "/error" };
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -36,5 +36,6 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+		return httpSecurity.build();
 	}
 }
