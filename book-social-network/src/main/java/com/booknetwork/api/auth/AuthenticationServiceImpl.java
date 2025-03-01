@@ -27,6 +27,7 @@ import com.booknetwork.api.user.User;
 import com.booknetwork.api.user.UserRepository;
 
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -50,6 +51,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		// check if user already exists by email
 		Optional<User> userWithEmail = this.userRepository.findByEmail(request.getEmail());
 		if (userWithEmail.isPresent()) {
+			if (!userWithEmail.get().isAccountEnabled()) {
+				sendValidationEmail(userWithEmail.get());
+				throw new ResourceAlreadyExistsException(
+						"Your account already exists, but is not verified... A new token has been sent to your email address. Kindly verify, then login.");
+			}
 			throw new ResourceAlreadyExistsException(
 					"A user with Email " + request.getEmail() + " already exists. Kindly Login.");
 		}
@@ -87,9 +93,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	// @Transactional
-	public void confirm(String token) throws MessagingException {
+	public String confirm(String token) throws MessagingException {
 		Token savedToken = tokenRepository.findByToken(token)
-				.orElseThrow(() -> new RuntimeException("Token not found."));
+				.orElseThrow(() -> new EntityNotFoundException("Invalid or Incorrect Token."));
 		if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
 			sendValidationEmail(savedToken.getUser());
 			throw new RuntimeException("Token is already expired... A new token has been sent to your email address.");
@@ -108,6 +114,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 				.orElseThrow(() -> new UsernameNotFoundException("User not found."));
 		user.setAccountEnabled(true);
 		userRepository.save(user);
+		return "Account activated successfully. Please login.";
 	}
 
 	private void sendValidationEmail(User user) throws MessagingException {

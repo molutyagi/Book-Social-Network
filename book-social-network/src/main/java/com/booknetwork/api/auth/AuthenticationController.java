@@ -24,7 +24,8 @@ public class AuthenticationController {
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest request) throws MessagingException {
 		authService.register(request);
-		return ResponseEntity.accepted().build();
+		return ResponseEntity.accepted().body(
+				"Account created successfully. An Account Activation email has been sent to you. Please check your mail.");
 	}
 
 	@PostMapping("/authenticate")
@@ -34,8 +35,8 @@ public class AuthenticationController {
 	}
 
 	@GetMapping("/activate-account")
-	public void confirm(@RequestParam String token) throws MessagingException {
-		this.authService.confirm(token);
+	public ResponseEntity<String> confirm(@RequestParam String token) throws MessagingException {
+		return ResponseEntity.ok(this.authService.confirm(token));
 	}
 
 }

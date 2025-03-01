@@ -8,6 +8,6 @@ public interface AuthenticationService {
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
 
-    void confirm(String token) throws MessagingException;
+    String confirm(String token) throws MessagingException;
 
 }
