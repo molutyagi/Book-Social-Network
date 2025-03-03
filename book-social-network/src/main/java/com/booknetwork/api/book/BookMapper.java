@@ -2,6 +2,8 @@ package com.booknetwork.api.book;
 
 import org.springframework.stereotype.Service;
 
+import com.booknetwork.api.history.BookTransactionHistory;
+
 @Service
 public class BookMapper {
 
@@ -34,6 +36,18 @@ public class BookMapper {
                 .ratings(book.getRatings())
                 .owner(book.getOwner().getFullName())
                 // .coverImage(null)
+                .build();
+    }
+
+    public BorrowedBooksResponse toBorrowedBooksResponse(BookTransactionHistory history) {
+        return BorrowedBooksResponse.builder()
+                .id(history.getBook().getId())
+                .title(history.getBook().getTitle())
+                .authorName(history.getBook().getAuthorName())
+                .isbn(history.getBook().getIsbn())
+                .ratings(history.getBook().getRatings())
+                .returned(history.isReturned())
+                .returnApproved(history.isReturnApproved())
                 .build();
     }
 }

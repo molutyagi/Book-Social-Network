@@ -19,6 +19,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.booknetwork.api.exception.OperationNotPermittedException;
 import com.booknetwork.api.exception.ResourceAlreadyExistsException;
 
 import jakarta.mail.MessagingException;
@@ -102,15 +103,21 @@ public class GlobalExceptionHandler {
                                                                 .build());
         }
 
+        @ExceptionHandler(OperationNotPermittedException.class)
+        public ResponseEntity<ExceptionResponse> handleException(OperationNotPermittedException exception) {
+                return ResponseEntity.status(UNAUTHORIZED)
+                                .body(
+                                                ExceptionResponse.builder().error(exception.getMessage())
+                                                                .build());
+        }
+
         @ExceptionHandler(Exception.class)
         public ResponseEntity<ExceptionResponse> handleException(Exception exception) {
                 exception.printStackTrace();
                 return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-                                .body(
-                                                ExceptionResponse.builder()
-                                                                .businessErrorDescription(
-                                                                                "Internal Server Error. Contact your administrator.")
-                                                                .error(exception.getMessage())
-                                                                .build());
+                                .body(ExceptionResponse.builder()
+                                                .businessErrorDescription(
+                                                                "Internal Server Error. Contact your administrator.")
+                                                .error(exception.getMessage()).build());
         }
 }
